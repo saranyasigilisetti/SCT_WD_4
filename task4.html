@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional To-Do App</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins',sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#1f6c71d5;
+      overflow:hidden;
+    }
+
+    /* Background Glow */
+
+    .bg1,
+    .bg2{
+      position:absolute;
+      border-radius:50%;
+      filter:blur(100px);
+      opacity:0.5;
+    }
+
+    .bg1{
+      width:300px;
+      height:300px;
+      background:#3b82f6;
+      top:-100px;
+      left:-100px;
+    }
+
+    .bg2{
+      width:300px;
+      height:300px;
+      background:#8b5cf6;
+      bottom:-100px;
+      right:-100px;
+    }
+
+    /* Main Container */
+
+    .container{
+      width:430px;
+      padding:30px;
+      border-radius:24px;
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(14px);
+      border:1px solid rgba(255,255,255,0.1);
+      box-shadow:0 10px 35px rgba(0,0,0,0.4);
+      position:relative;
+      z-index:1;
+      color:white;
+    }
+
+    /* Heading */
+
+    .title{
+      text-align:center;
+      margin-bottom:25px;
+    }
+
+    .title h1{
+      font-size:34px;
+      font-weight:700;
+      letter-spacing:1px;
+    }
+
+    .title p{
+      font-size:14px;
+      color:#cbd5e1;
+      margin-top:5px;
+    }
+
+    /* Input Box */
+
+    .input-box{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    input{
+      padding:14px;
+      border:none;
+      outline:none;
+      border-radius:12px;
+      background:rgba(40, 43, 46, 0.808);
+      border:1px solid rgba(255,255,255,0.08);
+      color:white;
+      font-size:15px;
+      transition:0.3s;
+    }
+
+    input:focus{
+      border:1px solid #3b82f6;
+      box-shadow:0 0 10px rgba(59,130,246,0.4);
+    }
+
+    input::placeholder{
+      color:#94a3b8;
+    }
+
+    /* Add Button */
+
+    .add-btn{
+      padding:14px;
+      border:none;
+      border-radius:12px;
+      background:linear-gradient(to right,#47249a,#7c3aed);
+      color:white;
+      font-size:16px;
+      font-weight:600;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .add-btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 20px rgba(16, 33, 60, 0.4);
+    }
+
+    /* Task List */
+
+    .task-list{
+      margin-top:25px;
+      max-height:320px;
+      overflow-y:auto;
+    }
+
+    .task-list::-webkit-scrollbar{
+      width:5px;
+    }
+
+    .task-list::-webkit-scrollbar-thumb{
+      background:#d193b9;
+      border-radius:10px;
+    }
+
+    /* Task Card */
+
+    .task{
+      background:rgba(169, 120, 179, 0.752);
+      border:1px solid rgba(255,255,255,0.08);
+      padding:18px;
+      border-radius:18px;
+      margin-bottom:16px;
+      transition:0.3s;
+    }
+
+    .task:hover{
+      transform:translateY(-2px);
+      background:rgba(39, 169, 48, 0.878);
+    }
+
+    .task h3{
+      font-size:20px;
+      margin-bottom:10px;
+      font-weight:600;
+    }
+
+    .task p{
+      font-size:14px;
+      color:#cbd5e1;
+      margin:4px 0;
+    }
+
+    /* Buttons */
+
+    .task-buttons{
+      display:flex;
+      gap:10px;
+      margin-top:14px;
+      flex-wrap:wrap;
+    }
+
+    .task-buttons button{
+      padding:9px 14px;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:13px;
+      font-weight:600;
+      transition:0.3s;
+      color:white;
+    }
+
+    .task-buttons button:hover{
+      transform:scale(1.05);
+    }
+
+    .complete{
+      background:#16a34a;
+    }
+
+    .edit{
+      background:#f59e0b;
+    }
+
+    .delete{
+      background:#dc2626;
+    }
+
+    /* Completed Task */
+
+    .completed{
+      opacity:0.6;
+      text-decoration:line-through;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="bg1"></div>
+  <div class="bg2"></div>
+
+  <div class="container">
+
+    <div class="title">
+      <h1>Task Manager</h1>
+      <p>Organize your daily work efficiently</p>
+    </div>
+
+    <div class="input-box">
+
+      <input type="text"
+      id="taskInput"
+      placeholder="Enter task title">
+
+      <input type="date"
+      id="dateInput">
+
+      <input type="time"
+      id="timeInput">
+
+      <button class="add-btn"
+      onclick="addTask()">
+      + Add New Task
+      </button>
+
+    </div>
+
+    <div class="task-list"
+    id="taskList"></div>
+
+  </div>
+
+  <script>
+
+    function addTask(){
+
+      let taskText =
+      document.getElementById("taskInput").value;
+
+      let taskDate =
+      document.getElementById("dateInput").value;
+
+      let taskTime =
+      document.getElementById("timeInput").value;
+
+      if(taskText === ""){
+        alert("Please enter a task");
+        return;
+      }
+
+      let taskDiv =
+      document.createElement("div");
+
+      taskDiv.classList.add("task");
+
+      taskDiv.innerHTML = `
+
+        <h3>${taskText}</h3>
+
+        <p>📅 Due Date : ${taskDate}</p>
+
+        <p>⏰ Time : ${taskTime}</p>
+
+        <div class="task-buttons">
+
+          <button class="complete"
+          onclick="completeTask(this)">
+          Complete
+          </button>
+
+          <button class="edit"
+          onclick="editTask(this)">
+          Edit
+          </button>
+
+          <button class="delete"
+          onclick="deleteTask(this)">
+          Delete
+          </button>
+
+        </div>
+
+      `;
+
+      document.getElementById("taskList")
+      .appendChild(taskDiv);
+
+      // Clear Input Fields
+
+      document.getElementById("taskInput").value = "";
+      document.getElementById("dateInput").value = "";
+      document.getElementById("timeInput").value = "";
+
+    }
+
+    // Complete Task
+
+    function completeTask(button){
+
+      let task =
+      button.parentElement.parentElement;
+
+      task.classList.toggle("completed");
+    }
+
+    // Delete Task
+
+    function deleteTask(button){
+
+      let task =
+      button.parentElement.parentElement;
+
+      task.remove();
+    }
+
+    // Edit Task
+
+    function editTask(button){
+
+      let task =
+      button.parentElement.parentElement;
+
+      let taskName =
+      task.querySelector("h3");
+
+      let newTask =
+      prompt("Edit Task", taskName.innerText);
+
+      if(newTask !== null && newTask !== ""){
+        taskName.innerText = newTask;
+      }
+    }
+
+  </script>
+
+</body>
+</html>
