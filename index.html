@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional To-Do App</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS File -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="bg1"></div>
+  <div class="bg2"></div>
+
+  <div class="container">
+
+    <div class="title">
+      <h1>Task Manager</h1>
+      <p>Organize your daily work efficiently</p>
+    </div>
+
+    <div class="input-box">
+
+      <input type="text"
+      id="taskInput"
+      placeholder="Enter task title">
+
+      <input type="date"
+      id="dateInput">
+
+      <input type="time"
+      id="timeInput">
+
+      <button class="add-btn"
+      onclick="addTask()">
+      + Add New Task
+      </button>
+
+    </div>
+
+    <div class="task-list"
+    id="taskList"></div>
+
+  </div>
+
+  <!-- JavaScript File -->
+  <script src="script.js"></script>
+
+</body>
+</html>
